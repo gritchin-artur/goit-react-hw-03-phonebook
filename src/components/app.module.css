@@ -1,0 +1,9 @@
+ul {
+  list-style: none;
+}
+
+.appContainer {
+  justify-content: center;
+  display: grid;
+  text-align: center;
+}

@@ -18,6 +18,21 @@ export class App extends React.Component {
     filter: "",
   };
 
+  //add loccalStorage
+  componentDidMount() {
+    const contacts = localStorage.getItem("phoneBook");
+
+    if (JSON.parse(contacts)) {
+      this.setState({ contacts: JSON.parse(contacts) });
+    }
+  }
+  // download from locale storage
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("phoneBook", JSON.stringify(this.state.contacts));
+    }
+  }
+
   // add name in phonebook
   addContact = (contact) => {
     const sameNsame = this.state.contacts.some(
@@ -38,21 +53,6 @@ export class App extends React.Component {
       contacts: [...contacts, newUser],
     }));
   };
-
-  //add loccalStorage
-  componentDidMount() {
-    const contacts = localStorage.getItem("phoneBook");
-
-    if (JSON.parse(contacts)) {
-      this.setState({ contacts: JSON.parse(contacts) });
-    }
-  }
-  // download from locale storage
-  componentDidUpdate(e) {
-    if (this.state.contacts !== e.contacts) {
-      localStorage.setItem("phoneBook", JSON.stringify(this.state.contacts));
-    }
-  }
 
   //delete contact
   handleDeleteContact = (contactId) => {
@@ -85,7 +85,7 @@ export class App extends React.Component {
 
   render() {
     const { contacts } = this.state;
-    const filtered = this.getFilterContacts;
+    const filtered = this.getFilterContacts(contacts);
     return (
       <Formik>
         <div className={css.appContainer}>
@@ -94,7 +94,7 @@ export class App extends React.Component {
           <h1>Contacts</h1>
           <FindContact findContact={this.filterValue} />
           <ContactsList
-            contacts={filtered(contacts)}
+            contacts={filtered}
             deleteContact={this.handleDeleteContact}
           />
         </div>
